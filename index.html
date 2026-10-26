@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>RED Beauty Studio by Malena Mendoza · Alta Estética & Bienestar</title>
+  <meta name="description" content="Centro de alta estética en España: tratamientos faciales, arte en uñas, masajes, diseño de mirada y depilación.">
+  <meta name="theme-color" content="#0A0A0A">
+
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#0A0A0A',
+            carbon: '#141414',
+            gold: { DEFAULT: '#C6A46A', light: '#E8D3A6', deep: '#8F7040' },
+            crimson: { DEFAULT: '#8B0000', hover: '#A50000', bright: '#E0524D', deep: '#1A0708' }
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Iconos Lucide -->
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    :root {
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+      --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+      --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+      --gold: #C6A46A;
+      --gold-metal: linear-gradient(100deg, #8F7040 0%, #C6A46A 28%, #F1E2BE 50%, #C6A46A 72%, #8F7040 100%);
+      --crimson: #8B0000;
+    }
+
+    html { -webkit-tap-highlight-color: transparent; }
+    body { background: #0A0A0A; color: #F5F2EA; }
+    ::selection { background: var(--crimson); color: #FFFFFF; }
+
+    /* Dorado metálico (degradado) para palabras destacadas y cifras */
+    .text-gold-metal {
+      background: var(--gold-metal);
+      background-size: 200% 100%;
+      background-position: 0% 50%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      padding-right: 0.08em; /* evita que se corte la cursiva */
+    }
+
+    /* ---------- Fade-up del Hero ---------- */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      filter: blur(6px);
+      transition:
+        opacity 900ms var(--ease-out),
+        transform 900ms var(--ease-out),
+        filter 900ms var(--ease-out);
+      transition-delay: var(--delay, 0ms);
+    }
+    .fade-up.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+
+    /* Zoom lento de la imagen de fondo */
+    .hero-bg {
+      transform: scale(1.08);
+      transition: transform 2400ms var(--ease-out);
+    }
+    .hero-bg.is-visible { transform: scale(1); }
+
+    /* Línea dorada decorativa */
+    .gold-rule {
+      transform: scaleX(0.2);
+      opacity: 0;
+      transform-origin: center;
+      transition: transform 1200ms var(--ease-out), opacity 1200ms var(--ease-out);
+      transition-delay: var(--delay, 0ms);
+    }
+    .gold-rule.is-visible { transform: scaleX(1); opacity: 1; }
+
+    /* ---------- Botones ---------- */
+    .btn {
+      transition:
+        transform 160ms var(--ease-out),
+        background-color 220ms ease,
+        color 220ms ease,
+        border-color 220ms ease,
+        box-shadow 220ms ease;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-crimson {
+      background-color: #8B0000;
+      box-shadow: 0 10px 30px -12px rgba(139, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+    .btn-outline-gold { border: 1px solid rgba(198, 164, 106, 0.7); }
+
+    @media (hover: hover) and (pointer: fine) {
+      .btn-crimson:hover {
+        background-color: #A50000;
+        box-shadow: 0 14px 40px -12px rgba(165, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+      .btn-outline-gold:hover { background-color: var(--gold); color: #0A0A0A; border-color: var(--gold); }
+      .btn-ghost-gold:hover { background-color: rgba(198, 164, 106, 0.1); border-color: var(--gold); }
+
+      .nav-link:hover { color: var(--gold); }
+      .nav-link:hover::after { transform: scaleX(1); }
+      .btn:hover .arrow { transform: translateX(3px); }
+    }
+
+    .arrow { transition: transform 220ms var(--ease-out); }
+
+    /* Subrayado de enlaces */
+    .nav-link { position: relative; transition: color 200ms ease; }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: -6px;
+      height: 1px;
+      background: #E0524D;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 260ms var(--ease-out);
+    }
+
+    /* ---------- Menú móvil ---------- */
+    .mobile-menu {
+      opacity: 0;
+      transform: translateY(-8px);
+      pointer-events: none;
+      visibility: hidden;
+      transition:
+        opacity 200ms var(--ease-out),
+        transform 200ms var(--ease-out),
+        visibility 0s linear 200ms;
+    }
+    .mobile-menu.is-open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+      visibility: visible;
+      transition:
+        opacity 280ms var(--ease-drawer),
+        transform 280ms var(--ease-drawer),
+        visibility 0s;
+    }
+    .mobile-menu .m-item {
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out);
+    }
+    .mobile-menu.is-open .m-item { opacity: 1; transform: translateY(0); }
+    .mobile-menu.is-open .m-item:nth-child(1) { transition-delay: 40ms; }
+    .mobile-menu.is-open .m-item:nth-child(2) { transition-delay: 80ms; }
+    .mobile-menu.is-open .m-item:nth-child(3) { transition-delay: 120ms; }
+    .mobile-menu.is-open .m-item:nth-child(4) { transition-delay: 160ms; }
+
+    /* Icono hamburguesa → X */
+    .burger span {
+      display: block;
+      height: 1px;
+      width: 22px;
+      background: currentColor;
+      transition: transform 240ms var(--ease-in-out), opacity 160ms ease;
+    }
+    .burger span + span { margin-top: 6px; }
+    .burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Navbar más sólido al hacer scroll */
+    #navbar { transition: background-color 300ms ease, border-color 300ms ease; }
+    #navbar.scrolled { background-color: rgba(10, 10, 10, 0.85); border-color: rgba(198, 164, 106, 0.25); }
+
+    /* Indicador de scroll */
+    @keyframes scrollDot {
+      0% { transform: translateY(0); opacity: 0; }
+      30% { opacity: 1; }
+      100% { transform: translateY(14px); opacity: 0; }
+    }
+    .scroll-dot { animation: scrollDot 2s var(--ease-out) infinite; }
+
+    /* Grano sutil para textura premium */
+    .grain::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.06;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      z-index: 1;
+    }
+
+    .hero-h { min-height: 100vh; min-height: 100svh; }
+
+    /* ---------- Tarjetas de tratamientos ---------- */
+    .service-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; }
+    .service-card { width: 100%; }
+    @media (min-width: 768px) {
+      .service-card { width: calc((100% - 1.5rem) / 2); }
+    }
+    @media (min-width: 1024px) {
+      .service-card { width: calc((100% - 3rem) / 3); }
+    }
+
+    .service-card .card-inner {
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+      background-color: #141414;
+      border: 1px solid rgba(198, 164, 106, 0.3);
+      transition: border-color 300ms ease, transform 300ms var(--ease-out), box-shadow 300ms ease;
+    }
+    /* Carmesí aclarado para que el texto pequeño se lea sobre #141414 (contraste ~4.8:1) */
+    .service-card .card-link { color: #E0524D; transition: color 200ms ease; }
+    .service-card .card-glow {
+      position: absolute;
+      inset: auto -30% -60% -30%;
+      height: 70%;
+      background: radial-gradient(ellipse at center, rgba(139, 0, 0, 0.35), transparent 70%);
+      opacity: 0;
+      transition: opacity 400ms ease;
+      pointer-events: none;
+    }
+    .service-card .card-icon { transition: transform 300ms var(--ease-out), background-color 300ms ease, color 300ms ease; }
+    .service-card .card-link .arrow { transition: transform 220ms var(--ease-out); }
+
+    @media (hover: hover) and (pointer: fine) {
+      .service-card:hover .card-inner {
+        border-color: #C6A46A;
+        transform: translateY(-8px);
+        box-shadow: 0 24px 60px -30px rgba(198, 164, 106, 0.35);
+      }
+      .service-card .card-link:hover { color: var(--gold); }
+      .service-card:hover .card-glow { opacity: 1; }
+      .service-card:hover .card-icon { transform: translateY(-2px); background-color: var(--crimson); border-color: var(--crimson); color: #FFFFFF; }
+      .service-card:hover .card-link .arrow { transform: translateX(3px); }
+    }
+
+    /* ---------- Formulario de reserva ---------- */
+    .field {
+      width: 100%;
+      background-color: #0A0A0A;
+      border: 1px solid #2A2A2A;
+      border-radius: 0.75rem;
+      color: #FFFFFF;
+      font-size: 16px; /* evita el zoom automático en iPhone */
+      padding: 0.95rem 1.1rem;
+      outline: none;
+      transition: border-color 200ms ease, box-shadow 200ms ease;
+    }
+    .field::placeholder { color: #6B6B6B; }
+    .field:focus {
+      border-color: #C6A46A;
+      box-shadow: 0 0 0 3px rgba(198, 164, 106, 0.15);
+    }
+    .field.is-invalid { border-color: #E0524D; }
+    select.field {
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      padding-right: 3rem;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23C6A46A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1.1rem center;
+    }
+    select.field:invalid { color: #6B6B6B; }
+    select.field option { color: #FFFFFF; background-color: #141414; }
+
+    .footer-link { transition: color 200ms ease; }
+    .social-link { transition: color 200ms ease, border-color 200ms ease, transform 160ms var(--ease-out); }
+    .social-link:active { transform: scale(0.95); }
+    @media (hover: hover) and (pointer: fine) {
+      .footer-link:hover { color: var(--gold); }
+      .social-link:hover { color: #0A0A0A; background-color: var(--gold); border-color: var(--gold); }
+    }
+
+    /* ---------- Logo ---------- */
+    .logo-img { filter: drop-shadow(0 0 8px rgba(198, 164, 106, 0.25)); }
+
+    /* El navbar fijo no tapa el inicio de cada sección al bajar */
+    section[id] { scroll-margin-top: 5rem; }
+
+    /* Brillo dorado cuando se preselecciona un tratamiento */
+    @keyframes preselect {
+      0% { box-shadow: 0 0 0 0 rgba(198, 164, 106, 0.55); border-color: #C6A46A; }
+      100% { box-shadow: 0 0 0 10px rgba(198, 164, 106, 0); border-color: #C6A46A; }
+    }
+    .field.is-preselected { animation: preselect 900ms var(--ease-out) 2; border-color: #C6A46A; }
+
+    /* ---------- Botón flotante de WhatsApp ---------- */
+    .fab {
+      bottom: calc(1.5rem + env(safe-area-inset-bottom));
+      transition: background-color 220ms ease, color 220ms ease, transform 220ms var(--ease-out), box-shadow 220ms ease;
+      box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.8);
+    }
+    .fab:active { transform: scale(0.95); }
+    .fab-ring { animation-duration: 2.4s; }
+    @media (hover: hover) and (pointer: fine) {
+      .fab:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -12px rgba(198, 164, 106, 0.45); }
+    }
+
+    /* Accesibilidad: menos movimiento */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .fab-ring { animation: none; opacity: 0; }
+      .field.is-preselected { animation: none; }
+      .fade-up, .gold-rule { transform: none; filter: none; transition: opacity 400ms ease; }
+      .hero-bg { transform: none; transition: none; }
+      .scroll-dot { animation: none; }
+      .mobile-menu, .mobile-menu.is-open, .mobile-menu .m-item { transform: none; }
+    }
+  </style>
+</head>
+<body class="font-sans antialiased overflow-x-hidden">
+
+  <!-- ================= NAVBAR ================= -->
+  <header id="navbar" class="fixed inset-x-0 top-0 z-50 border-b border-gold/15 bg-ink/60 backdrop-blur-md">
+    <nav class="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8" aria-label="Navegación principal">
+      <!-- Logo -->
+      <a href="#inicio" class="flex shrink-0 items-center" aria-label="Ir al inicio">
+        <img
+          id="logo"
+          src="logo.png"
+          alt="RED Beauty Studio by Malena Mendoza"
+          width="1142"
+          height="478"
+          class="logo-img h-12 md:h-14 w-auto object-contain transition-transform duration-300 hover:scale-105"
+          onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='inline';"
+        >
+        <span id="logo-fallback" class="hidden font-display text-xl tracking-wide text-white">
+          RED <span class="italic text-gold-metal">Beauty Studio</span>
+        </span>
+      </a>
+
+      <!-- Enlaces centro -->
+      <ul class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 text-[13px] font-medium uppercase tracking-[0.18em] text-white/90 md:flex">
+        <li><a href="#inicio" class="nav-link">Inicio</a></li>
+        <li><a href="#tratamientos" class="nav-link">Tratamientos</a></li>
+        <li><a href="#contacto" class="nav-link">Contacto</a></li>
+      </ul>
+
+      <!-- Derecha -->
+      <div class="flex items-center gap-3">
+        <a href="#contacto" class="btn btn-crimson hidden items-center gap-2 rounded-full px-5 py-2.5 text-[13px] font-medium tracking-wide text-white sm:inline-flex">
+          <i data-lucide="calendar-heart" class="h-4 w-4"></i>
+          Reservar Cita
+        </a>
+        <button
+          id="menu-toggle"
+          type="button"
+          class="burger btn flex h-11 w-11 flex-col items-center justify-center rounded-full border border-white/10 text-white md:hidden"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Menú móvil -->
+    <div id="mobile-menu" class="mobile-menu absolute inset-x-0 top-full border-b border-gold/15 bg-carbon/95 backdrop-blur-md md:hidden">
+      <ul class="flex flex-col gap-1 px-5 py-6">
+        <li class="m-item"><a href="#inicio" class="mobile-link flex items-center justify-between py-3 font-display text-2xl text-white">Inicio <i data-lucide="arrow-up-right" class="h-5 w-5 text-gold"></i></a></li>
+        <li class="m-item"><a href="#tratamientos" class="mobile-link flex items-center justify-between py-3 font-display text-2xl text-white">Tratamientos <i data-lucide="arrow-up-right" class="h-5 w-5 text-gold"></i></a></li>
+        <li class="m-item"><a href="#contacto" class="mobile-link flex items-center justify-between py-3 font-display text-2xl text-white">Contacto <i data-lucide="arrow-up-right" class="h-5 w-5 text-gold"></i></a></li>
+        <li class="m-item pt-4">
+          <a href="#contacto" class="mobile-link btn btn-crimson flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-sm font-medium tracking-wide text-white">
+            <i data-lucide="calendar-heart" class="h-4 w-4"></i>
+            Reservar Cita
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <!-- ================= HERO ================= -->
+    <section id="inicio" class="hero-h grain relative flex items-center justify-center overflow-hidden bg-ink">
+      <!-- Imagen de fondo -->
+      <div class="absolute inset-0">
+        <img
+          src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=2000&q=80"
+          alt=""
+          aria-hidden="true"
+          class="hero-bg reveal h-full w-full object-cover"
+          fetchpriority="high"
+        >
+        <!-- Overlay negro 70% -->
+        <div class="absolute inset-0 bg-black/70"></div>
+        <!-- Luz carmesí de marca -->
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_100%,rgba(139,0,0,0.45),transparent_70%)]"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_40%_40%_at_0%_0%,rgba(139,0,0,0.25),transparent_70%)]"></div>
+        <!-- Viñeta y degradado inferior -->
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(10,10,10,0.6)_100%)]"></div>
+        <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-ink"></div>
+      </div>
+
+      <!-- Contenido -->
+      <div class="relative z-10 mx-auto max-w-4xl px-5 pt-24 pb-16 text-center sm:px-8">
+        <p class="fade-up reveal mb-6 text-[11px] font-medium uppercase tracking-[0.45em] text-crimson-bright sm:text-xs" style="--delay: 100ms">
+          Alta Estética &amp; Bienestar
+        </p>
+
+        <div class="gold-rule reveal mx-auto mb-8 h-px w-24 bg-gradient-to-r from-transparent via-gold to-transparent" style="--delay: 200ms"></div>
+
+        <h1 class="fade-up reveal font-display text-[2.6rem] font-medium leading-[1.08] text-white sm:text-6xl lg:text-7xl" style="--delay: 250ms">
+          Realza tu belleza con
+          <span class="italic text-gold-metal">elegancia</span>
+          y exclusividad
+        </h1>
+
+        <p class="fade-up reveal mx-auto mt-8 max-w-2xl text-base font-light leading-relaxed text-white/75 sm:text-lg" style="--delay: 400ms">
+          Un refugio dedicado a ti: tratamientos faciales avanzados, arte en uñas, masajes terapéuticos,
+          diseño de mirada y depilación, realizados por especialistas con productos de primera línea.
+        </p>
+
+        <div class="fade-up reveal mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row" style="--delay: 550ms">
+          <a href="#tratamientos" class="btn btn-crimson inline-flex w-full items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-medium tracking-wide text-white sm:w-auto">
+            Descubrir Tratamientos
+            <i data-lucide="arrow-right" class="arrow h-4 w-4"></i>
+          </a>
+          <a
+            href="https://wa.me/34600000000?text=Hola%2C%20me%20gustar%C3%ADa%20agendar%20una%20cita"
+            data-whatsapp="Hola, me gustaría agendar una cita"
+            target="_blank"
+            rel="noopener"
+            class="btn btn-ghost-gold inline-flex w-full items-center justify-center gap-2 rounded-full border border-gold/70 px-8 py-4 text-sm font-medium tracking-wide text-gold sm:w-auto"
+          >
+            <i data-lucide="message-circle" class="h-4 w-4"></i>
+            Agendar por WhatsApp
+          </a>
+        </div>
+
+        <div class="fade-up reveal mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-[11px] uppercase tracking-[0.25em] text-white/50" style="--delay: 700ms">
+          <span class="flex items-center gap-2"><i data-lucide="sparkles" class="h-3.5 w-3.5 text-gold"></i> Especialistas certificadas</span>
+          <span class="flex items-center gap-2"><i data-lucide="gem" class="h-3.5 w-3.5 text-gold"></i> Productos premium</span>
+        </div>
+      </div>
+
+      <!-- Indicador de scroll -->
+      <a href="#tratamientos" class="fade-up reveal absolute bottom-8 left-1/2 z-10 -translate-x-1/2" style="--delay: 900ms" aria-label="Bajar a tratamientos">
+        <span class="flex h-10 w-6 justify-center rounded-full border border-gold/40 pt-2">
+          <span class="scroll-dot block h-1.5 w-1.5 rounded-full bg-crimson-bright"></span>
+        </span>
+      </a>
+    </section>
+
+    <!-- Anclas para los siguientes bloques -->
+    <!-- ================= TRATAMIENTOS ================= -->
+    <section id="tratamientos" class="relative bg-ink py-24 sm:py-32">
+      <div class="mx-auto max-w-7xl px-5 sm:px-8">
+        <!-- Encabezado -->
+        <div class="mx-auto mb-16 max-w-2xl text-center sm:mb-20">
+          <p class="fade-up reveal mb-5 text-[11px] font-medium uppercase tracking-[0.45em] text-crimson-bright sm:text-xs">
+            Experiencias Exclusivas
+          </p>
+          <h2 class="fade-up reveal font-display text-4xl font-medium leading-tight text-white sm:text-5xl lg:text-6xl" style="--delay: 100ms">
+            Nuestros <span class="italic text-gold-metal">Tratamientos</span>
+          </h2>
+          <div class="gold-rule reveal mx-auto mt-8 h-px w-24 bg-gradient-to-r from-transparent via-gold to-transparent" style="--delay: 200ms"></div>
+          <p class="fade-up reveal mt-8 text-base font-light leading-relaxed text-white/65" style="--delay: 250ms">
+            Cada ritual está pensado a medida, con técnicas avanzadas y un trato cercano que convierte cada visita en un momento solo para ti.
+          </p>
+        </div>
+
+        <!-- Grid de tarjetas -->
+        <div class="service-grid">
+          <!-- Tarjeta 1 -->
+          <article class="service-card fade-up reveal" data-stagger>
+            <div class="card-inner flex flex-col rounded-2xl p-8 sm:p-10">
+              <div class="card-glow"></div>
+              <div class="mb-8 flex items-start justify-between">
+                <span class="card-icon flex h-14 w-14 items-center justify-center rounded-full border border-gold/30 bg-gold/5 text-gold">
+                  <i data-lucide="sparkles" class="h-6 w-6"></i>
+                </span>
+                <span class="font-display text-sm italic text-crimson-bright/80">01</span>
+              </div>
+              <h3 class="font-display text-2xl text-white">Tratamientos Faciales</h3>
+              <p class="mt-4 text-sm font-light leading-relaxed text-neutral-300">
+                Protocolos personalizados que devuelven luz, firmeza y frescura a tu piel desde la primera sesión.
+              </p>
+              <ul class="mt-6 flex flex-wrap gap-2">
+                <li class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">Rejuvenecimiento</li>
+                <li class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">Limpieza profunda</li>
+                <li class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">Hidratación</li>
+              </ul>
+              <a href="#contacto" data-treatment="Tratamiento Facial" class="card-link mt-auto inline-flex items-center gap-2 pt-8 text-xs font-semibold uppercase tracking-[0.2em]">
+                Ver detalles <i data-lucide="arrow-right" class="arrow h-4 w-4"></i>
+              </a>
+            </div>
+          </article>
+
+          <!-- Tarjeta 2 -->
+          <article class="service-card fade-up reveal" data-stagger>
+            <div class="card-inner flex flex-col rounded-2xl p-8 sm:p-10">
+              <div class="card-glow"></div>
+              <div class="mb-8 flex items-start justify-between">
+                <span class="card-icon flex h-14 w-14 items-center justify-center rounded-full border border-gold/30 bg-gold/5 text-gold">
+                  <i data-lucide="brush" class="h-6 w-6"></i>
+                </span>
+                <span class="font-display text-sm italic text-crimson-bright/80">02</span>
+              </div>
+              <h3 class="font-display text-2xl text-white">Arte en Uñas Global</h3>
+              <p class="mt-4 text-sm font-light leading-relaxed text-neutral-300">
+                Manos impecables con acabados duraderos y diseños creados al detalle para expresar tu estilo.
+              </p>
+              <ul class="mt-6 flex flex-wrap gap-2">
+                <li class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">Acrílicas</li>
+                <li class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">Gel</li>
+                <li class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">Semipermanente</li>
+                <li class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">Nail art</li>
+                <li class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">Spa de manos</li>
+              </ul>
+              <a href="#contacto" data-treatment="Arte en Uñas" class="card-link mt-auto inline-flex items-center gap-2 pt-8 text-xs font-semibold uppercase tracking-[0.2em]">
+                Ver detalles <i data-lucide="arrow-right" class="arrow h-4 w-4"></i>
+              </a>
+            </div>
+          </article>
+
+          <!-- Tarjeta 3 -->
+          <article class="service-card fade-up reveal" data-stagger>
+            <div class="card-inner flex flex-col rounded-2xl p-8 sm:p-10">
+              <div class="card-glow"></div>
+              <div class="mb-8 flex items-start justify-between">
+                <span class="card-icon flex h-14 w-14 items-center justify-center rounded-full border border-gold/30 bg-gold/5 text-gold">
+                  <i data-lucide="hand-heart" class="h-6 w-6"></i>
+                </span>
+                <span class="font-display text-sm italic text-crimson-bright/80">03</span>
+              </div>
+              <h3 class="font-display text-2xl text-white">Masajes Especializados</h3>
+              <p class="mt-4 text-sm font-light leading-relaxed text-neutral-300">
+                Liberan tensiones, relajan cuerpo y mente y moldean la figura con técnicas manuales expertas.
+              </p>
+              <ul class="mt-6 flex flex-wrap gap-2">
+                <li class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">Descontracturante</li>
+                <li class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">Relajante</li>
+                <li class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">Estético / Reductor</li>
+              </ul>
+              <a href="#contacto" data-treatment="Masajes" class="card-link mt-auto inline-flex items-center gap-2 pt-8 text-xs font-semibold uppercase tracking-[0.2em]">
+                Ver detalles <i data-lucide="arrow-right" class="arrow h-4 w-4"></i>
+              </a>
+            </div>
+          </article>
+
+          <!-- Tarjeta 4 -->
+          <article class="service-card fade-up reveal" data-stagger>
+            <div class="card-inner flex flex-col rounded-2xl p-8 sm:p-10">
+              <div class="card-glow"></div>
+              <div class="mb-8 flex items-start justify-between">
+                <span class="card-icon flex h-14 w-14 items-center justify-center rounded-full border border-gold/30 bg-gold/5 text-gold">
+                  <i data-lucide="eye" class="h-6 w-6"></i>
+                </span>
+                <span class="font-display text-sm italic text-crimson-bright/80">04</span>
+              </div>
+              <h3 class="font-display text-2xl text-white">Diseño de Mirada</h3>
+              <p class="mt-4 text-sm font-light leading-relaxed text-neutral-300">
+                Cejas y pestañas diseñadas según la armonía de tu rostro para una mirada intensa y natural.
+              </p>
+              <ul class="mt-6 flex flex-wrap gap-2">
+                <li class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">Lifting de pestañas</li>
+                <li class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">Extensiones</li>
+                <li class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">Laminado de cejas</li>
+              </ul>
+              <a href="#contacto" data-treatment="Diseño de Mirada" class="card-link mt-auto inline-flex items-center gap-2 pt-8 text-xs font-semibold uppercase tracking-[0.2em]">
+                Ver detalles <i data-lucide="arrow-right" class="arrow h-4 w-4"></i>
+              </a>
+            </div>
+          </article>
+
+          <!-- Tarjeta 5 -->
+          <article class="service-card fade-up reveal" data-stagger>
+            <div class="card-inner flex flex-col rounded-2xl p-8 sm:p-10">
+              <div class="card-glow"></div>
+              <div class="mb-8 flex items-start justify-between">
+                <span class="card-icon flex h-14 w-14 items-center justify-center rounded-full border border-gold/30 bg-gold/5 text-gold">
+                  <i data-lucide="feather" class="h-6 w-6"></i>
+                </span>
+                <span class="font-display text-sm italic text-crimson-bright/80">05</span>
+              </div>
+              <h3 class="font-display text-2xl text-white">Depilación con Cera</h3>
+              <p class="mt-4 text-sm font-light leading-relaxed text-neutral-300">
+                Piel suave durante semanas con ceras de alta calidad, aplicadas con cuidado incluso en las zonas más sensibles.
+              </p>
+              <ul class="mt-6 flex flex-wrap gap-2">
+                <li class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">Técnica suave</li>
+                <li class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">Hipoalergénica</li>
+                <li class="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-white/70">Duradera</li>
+              </ul>
+              <a href="#contacto" data-treatment="Depilación con Cera" class="card-link mt-auto inline-flex items-center gap-2 pt-8 text-xs font-semibold uppercase tracking-[0.2em]">
+                Ver detalles <i data-lucide="arrow-right" class="arrow h-4 w-4"></i>
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+    <!-- ================= LA EXPERIENCIA ================= -->
+    <section id="experiencia" class="relative overflow-hidden border-y border-gold/15 bg-carbon py-24 sm:py-32">
+      <!-- Resplandor carmesí detrás de la imagen -->
+      <div class="pointer-events-none absolute -left-40 top-1/2 h-[520px] w-[520px] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(139,0,0,0.35),transparent_65%)]" aria-hidden="true"></div>
+      <div class="relative mx-auto grid max-w-7xl items-center gap-16 px-5 sm:px-8 lg:grid-cols-2 lg:gap-24">
+        <!-- Columna izquierda: visual -->
+        <div class="fade-up reveal relative mx-auto w-full max-w-md lg:max-w-none" data-stagger>
+          <div class="relative mr-4 mb-4">
+            <!-- Marco decorativo desplazado -->
+            <div class="absolute inset-0 translate-x-4 translate-y-4 rounded-2xl border border-gold" aria-hidden="true"></div>
+            <!-- Imagen -->
+            <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-ink">
+              <img
+                src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1200&q=80"
+                alt="Especialista realizando un tratamiento facial en una cabina de lujo"
+                class="h-full w-full object-cover"
+                loading="lazy"
+              >
+              <div class="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent" aria-hidden="true"></div>
+            </div>
+            <!-- Insignia flotante -->
+            <div class="absolute -bottom-6 -left-2 flex items-center gap-3 rounded-xl border border-gold bg-ink px-5 py-4 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.9)] sm:-left-8">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-crimson text-white">
+                <i data-lucide="gem" class="h-5 w-5"></i>
+              </span>
+              <span class="leading-tight">
+                <span class="block font-display text-xl text-gold">100%</span>
+                <span class="block text-[11px] uppercase tracking-[0.18em] text-white/80">Productos Premium</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna derecha: contenido -->
+        <div class="fade-up reveal" data-stagger>
+          <p class="mb-5 text-[11px] font-medium uppercase tracking-[0.45em] text-crimson-bright sm:text-xs">
+            El Arte del Cuidado Personal
+          </p>
+          <h2 class="font-display text-4xl font-medium leading-tight text-white sm:text-5xl">
+            Un santuario de belleza y relajación en <span class="italic text-gold-metal">España</span>
+          </h2>
+          <p class="mt-6 text-base font-light leading-relaxed text-neutral-300">
+            Aquí cada visita empieza escuchándote. Diseñamos cada tratamiento según tu piel y tus objetivos,
+            trabajamos con protocolos de higiene rigurosos y material esterilizado, y aplicamos técnicas avanzadas
+            que nuestro equipo actualiza constantemente. El resultado: belleza visible y la tranquilidad de estar en las mejores manos.
+          </p>
+
+          <ul class="mt-8 space-y-4">
+            <li class="flex items-center gap-4">
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-crimson text-white shadow-[0_6px_18px_-6px_rgba(139,0,0,0.8)]">
+                <i data-lucide="check" class="h-4 w-4"></i>
+              </span>
+              <span class="text-white">Especialistas Certificadas</span>
+            </li>
+            <li class="flex items-center gap-4">
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-crimson text-white shadow-[0_6px_18px_-6px_rgba(139,0,0,0.8)]">
+                <i data-lucide="check" class="h-4 w-4"></i>
+              </span>
+              <span class="text-white">Cosmética de Alta Gama</span>
+            </li>
+            <li class="flex items-center gap-4">
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-crimson text-white shadow-[0_6px_18px_-6px_rgba(139,0,0,0.8)]">
+                <i data-lucide="check" class="h-4 w-4"></i>
+              </span>
+              <span class="text-white">Ambiente Privado y Relajante</span>
+            </li>
+          </ul>
+
+          <!-- Estadísticas -->
+          <dl class="mt-12 grid grid-cols-3 divide-x divide-gold/15 border-t border-gold/15 pt-10">
+            <div class="flex flex-col pr-3 sm:pr-6">
+              <dt class="order-2 mt-2 text-[11px] uppercase leading-snug tracking-[0.15em] text-neutral-400 sm:text-xs">Clientas Satisfechas</dt>
+              <dd class="order-1 font-display text-3xl text-gold-metal sm:text-5xl">+500</dd>
+            </div>
+            <div class="flex flex-col px-3 sm:px-6">
+              <dt class="order-2 mt-2 text-[11px] uppercase leading-snug tracking-[0.15em] text-neutral-400 sm:text-xs">Valoración Media</dt>
+              <dd class="order-1 font-display text-3xl text-gold-metal sm:text-5xl">5★</dd>
+            </div>
+            <div class="flex flex-col pl-3 sm:pl-6">
+              <dt class="order-2 mt-2 text-[11px] uppercase leading-snug tracking-[0.15em] text-neutral-400 sm:text-xs">Garantía de Calidad</dt>
+              <dd class="order-1 font-display text-3xl text-gold-metal sm:text-5xl">100%</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CONTACTO / RESERVA ================= -->
+    <section id="contacto" class="relative bg-ink py-24 sm:py-32">
+      <div class="mx-auto grid max-w-7xl items-start gap-16 px-5 sm:px-8 lg:grid-cols-2 lg:gap-24">
+        <!-- Columna izquierda: información -->
+        <div class="fade-up reveal lg:pt-6" data-stagger>
+          <p class="mb-5 text-[11px] font-medium uppercase tracking-[0.45em] text-crimson-bright sm:text-xs">
+            Reserva tu Cita
+          </p>
+          <h2 class="font-display text-4xl font-medium leading-tight text-white sm:text-5xl">
+            Tu momento de <span class="italic text-gold-metal">exclusividad</span> comienza aquí
+          </h2>
+          <p class="mt-6 max-w-lg text-base font-light leading-relaxed text-neutral-300">
+            Déjanos tus datos y el tratamiento que te interesa. Te confirmaremos la cita por WhatsApp
+            en el horario que mejor te encaje.
+          </p>
+
+          <ul class="mt-10 space-y-6">
+            <li class="flex items-start gap-4">
+              <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gold/40 text-gold">
+                <i data-lucide="map-pin" class="h-5 w-5"></i>
+              </span>
+              <span>
+                <span class="block text-[11px] uppercase tracking-[0.2em] text-neutral-400">Dirección</span>
+                <span class="mt-1 block text-white">Calle Serrano, Madrid, España</span>
+              </span>
+            </li>
+            <li class="flex items-start gap-4">
+              <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gold/40 text-gold">
+                <i data-lucide="phone" class="h-5 w-5"></i>
+              </span>
+              <span>
+                <span class="block text-[11px] uppercase tracking-[0.2em] text-neutral-400">Teléfono / WhatsApp</span>
+                <a href="https://wa.me/34600000000" data-whatsapp="" target="_blank" rel="noopener" class="footer-link mt-1 block text-white">+34 600 000 000</a>
+              </span>
+            </li>
+            <li class="flex items-start gap-4">
+              <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-gold/40 text-gold">
+                <i data-lucide="clock" class="h-5 w-5"></i>
+              </span>
+              <span>
+                <span class="block text-[11px] uppercase tracking-[0.2em] text-neutral-400">Horario</span>
+                <span class="mt-1 block text-white">Lun - Sáb: 10:00 - 20:00</span>
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Columna derecha: formulario -->
+        <div class="fade-up reveal" data-stagger>
+          <form id="booking-form" class="relative overflow-hidden rounded-2xl border border-gold/30 bg-carbon p-6 sm:p-10" novalidate>
+            <div class="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-crimson via-crimson-bright to-crimson" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(139,0,0,0.3),transparent_70%)]" aria-hidden="true"></div>
+            <h3 class="font-display text-2xl text-white">Solicitar cita</h3>
+            <p class="mt-2 text-sm text-neutral-400">Respondemos en menos de 24 horas.</p>
+
+            <div class="mt-8 space-y-5">
+              <div>
+                <label for="nombre" class="mb-2 block text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-300">Nombre completo</label>
+                <input id="nombre" name="nombre" type="text" autocomplete="name" required placeholder="Ej. Lucía Fernández" class="field">
+              </div>
+
+              <div>
+                <label for="telefono" class="mb-2 block text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-300">Teléfono</label>
+                <input id="telefono" name="telefono" type="tel" autocomplete="tel" inputmode="tel" required placeholder="+34 600 000 000" class="field">
+              </div>
+
+              <div>
+                <label for="tratamiento" class="mb-2 block text-[11px] font-medium uppercase tracking-[0.2em] text-neutral-300">Tratamiento de interés</label>
+                <select id="tratamiento" name="tratamiento" required class="field">
+                  <option value="" disabled selected>Selecciona un tratamiento</option>
+                  <option value="Tratamiento Facial">Tratamiento Facial</option>
+                  <option value="Arte en Uñas">Arte en Uñas</option>
+                  <option value="Masajes">Masajes</option>
+                  <option value="Diseño de Mirada">Diseño de Mirada</option>
+                  <option value="Depilación con Cera">Depilación con Cera</option>
+                </select>
+              </div>
+            </div>
+
+            <p id="form-error" class="mt-5 hidden text-sm text-[#E0524D]" role="alert">Por favor, completa todos los campos.</p>
+
+            <button type="submit" class="btn btn-crimson mt-8 inline-flex w-full items-center justify-center gap-3 rounded-full px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-white">
+              <i data-lucide="message-circle" class="h-4 w-4"></i>
+              Confirmar Solicitud por WhatsApp
+            </button>
+
+            <p class="mt-5 text-center text-xs leading-relaxed text-neutral-500">
+              Al enviar aceptas nuestra <a href="#privacidad" class="footer-link underline underline-offset-2">Política de Privacidad</a>.
+              Tus datos solo se usan para gestionar tu cita.
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="relative border-t border-crimson/60 bg-[#050505] pt-16 pb-10">
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-crimson/15 to-transparent" aria-hidden="true"></div>
+    <div class="relative mx-auto max-w-7xl px-5 sm:px-8">
+      <div class="flex flex-col items-center gap-10 text-center md:flex-row md:justify-between md:text-left">
+        <!-- Logo -->
+        <a href="#inicio" class="flex items-center" aria-label="Ir al inicio">
+          <img
+            src="logo.png"
+            alt="RED Beauty Studio by Malena Mendoza"
+            width="1142"
+            height="478"
+            loading="lazy"
+            class="logo-img h-12 md:h-14 w-auto object-contain transition-transform duration-300 hover:scale-105"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='inline';"
+          >
+          <span class="hidden font-display text-xl tracking-wide text-white">
+            RED <span class="italic text-gold-metal">Beauty Studio</span>
+          </span>
+        </a>
+
+        <!-- Enlaces legales -->
+        <nav aria-label="Enlaces legales">
+          <ul class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs uppercase tracking-[0.2em] text-neutral-400">
+            <li><a href="#aviso-legal" class="footer-link">Aviso Legal</a></li>
+            <li><a href="#privacidad" class="footer-link">Privacidad</a></li>
+            <li><a href="#cookies" class="footer-link">Cookies</a></li>
+          </ul>
+        </nav>
+
+        <!-- Redes sociales -->
+        <div class="flex items-center gap-3">
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram" class="social-link flex h-11 w-11 items-center justify-center rounded-full border border-gold/40 text-gold">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+              <circle cx="12" cy="12" r="4"></circle>
+              <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"></circle>
+            </svg>
+          </a>
+          <a href="https://www.tiktok.com/" target="_blank" rel="noopener" aria-label="TikTok" class="social-link flex h-11 w-11 items-center justify-center rounded-full border border-gold/40 text-gold">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-[18px] w-[18px]" aria-hidden="true">
+              <path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5 2.59 2.59 0 0 1-2.59-2.59 2.6 2.6 0 0 1 3.4-2.47V9.68a5.68 5.68 0 0 0-.81-.06A5.69 5.69 0 0 0 4.17 15.3 5.69 5.69 0 0 0 9.86 21a5.69 5.69 0 0 0 5.69-5.69V9.01a7.35 7.35 0 0 0 4.28 1.37V7.29a4.28 4.28 0 0 1-3.23-1.47Z"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-12 border-t border-white/5 pt-8 text-center text-xs text-neutral-500">
+        &copy; <span id="year">2026</span> RED Beauty Studio by Malena Mendoza. Todos los derechos reservados.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= BOTÓN FLOTANTE WHATSAPP ================= -->
+  <a
+    id="whatsapp-fab"
+    href="https://wa.me/34600000000"
+    data-whatsapp="Hola, me gustaría información sobre vuestros tratamientos"
+    target="_blank"
+    rel="noopener"
+    aria-label="Escríbenos por WhatsApp"
+    class="fab group fixed right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-gold bg-crimson text-white hover:bg-[#C6A46A] hover:text-[#0A0A0A]"
+  >
+    <span class="fab-ring pointer-events-none absolute inset-0 rounded-full border border-gold opacity-40 animate-ping" aria-hidden="true"></span>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="relative h-6 w-6" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"></path>
+    </svg>
+  </a>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Iconos
+      if (window.lucide) lucide.createIcons();
+
+      // ---------- Número de WhatsApp (cambiar solo aquí) ----------
+      var WHATSAPP_NUMBER = '34600000000';
+      function whatsappUrl(text) {
+        return 'https://wa.me/' + WHATSAPP_NUMBER + (text ? '?text=' + encodeURIComponent(text) : '');
+      }
+      document.querySelectorAll('[data-whatsapp]').forEach(function (link) {
+        link.href = whatsappUrl(link.getAttribute('data-whatsapp'));
+      });
+
+      // ---------- Fade-up con IntersectionObserver ----------
+      var revealEls = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function (entries) {
+          // Las tarjetas que entran juntas se escalonan entre sí (80 ms),
+          // así el efecto funciona igual en 1, 2 o 3 columnas.
+          var staggerIndex = 0;
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              if (entry.target.hasAttribute('data-stagger')) {
+                entry.target.style.setProperty('--delay', (staggerIndex * 80) + 'ms');
+                staggerIndex++;
+              }
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+        requestAnimationFrame(function () {
+          revealEls.forEach(function (el) { observer.observe(el); });
+        });
+      } else {
+        revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+      }
+
+      // ---------- Menú móvil ----------
+      var toggle = document.getElementById('menu-toggle');
+      var menu = document.getElementById('mobile-menu');
+
+      function setMenu(open) {
+        menu.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+      }
+
+      toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        setMenu(!menu.classList.contains('is-open'));
+      });
+
+      document.querySelectorAll('.mobile-link').forEach(function (link) {
+        link.addEventListener('click', function () { setMenu(false); });
+      });
+
+      document.addEventListener('click', function (e) {
+        if (menu.classList.contains('is-open') && !menu.contains(e.target)) setMenu(false);
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && menu.classList.contains('is-open')) {
+          setMenu(false);
+          toggle.focus();
+        }
+      });
+
+      window.matchMedia('(min-width: 768px)').addEventListener('change', function (mq) {
+        if (mq.matches) setMenu(false);
+      });
+
+      // ---------- Navbar al hacer scroll ----------
+      var navbar = document.getElementById('navbar');
+      function onScroll() { navbar.classList.toggle('scrolled', window.scrollY > 24); }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      // ---------- Formulario de reserva → WhatsApp ----------
+      var form = document.getElementById('booking-form');
+      var formError = document.getElementById('form-error');
+      var fields = [
+        document.getElementById('nombre'),
+        document.getElementById('telefono'),
+        document.getElementById('tratamiento')
+      ];
+
+      fields.forEach(function (field) {
+        var evt = field.tagName === 'SELECT' ? 'change' : 'input';
+        field.addEventListener(evt, function () {
+          if (field.value.trim()) field.classList.remove('is-invalid');
+        });
+      });
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        var firstInvalid = null;
+        fields.forEach(function (field) {
+          var empty = !field.value.trim();
+          field.classList.toggle('is-invalid', empty);
+          if (empty && !firstInvalid) firstInvalid = field;
+        });
+
+        if (firstInvalid) {
+          formError.classList.remove('hidden');
+          firstInvalid.focus();
+          return;
+        }
+        formError.classList.add('hidden');
+
+        var nombre = fields[0].value.trim();
+        var telefono = fields[1].value.trim();
+        var tratamiento = fields[2].value;
+
+        var mensaje =
+          'Hola, soy ' + nombre + '. Me gustaría reservar una cita para: ' + tratamiento + '.\n' +
+          'Mi teléfono de contacto es ' + telefono + '.\n' +
+          '¿Qué disponibilidad tenéis?';
+
+        var url = whatsappUrl(mensaje);
+        var win = window.open(url, '_blank', 'noopener');
+        if (!win) window.location.href = url;
+      });
+
+      // ---------- "Ver detalles" → baja al formulario y preselecciona el tratamiento ----------
+      var treatmentSelect = document.getElementById('tratamiento');
+      var contactSection = document.getElementById('contacto');
+      var preselectTimer = null;
+
+      document.querySelectorAll('.card-link[data-treatment]').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          treatmentSelect.value = link.getAttribute('data-treatment');
+          treatmentSelect.classList.remove('is-invalid');
+          treatmentSelect.dispatchEvent(new Event('change'));
+
+          var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          contactSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+
+          treatmentSelect.classList.remove('is-preselected');
+          void treatmentSelect.offsetWidth; // reinicia la animación si se pulsa otra tarjeta
+          treatmentSelect.classList.add('is-preselected');
+          clearTimeout(preselectTimer);
+          preselectTimer = setTimeout(function () {
+            treatmentSelect.classList.remove('is-preselected');
+          }, 2200);
+        });
+      });
+
+      // Año actual en el copyright
+      document.getElementById('year').textContent = new Date().getFullYear();
+    });
+  </script>
+</body>
+</html>
